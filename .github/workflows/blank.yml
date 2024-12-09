@@ -19,14 +19,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
 
-  test:
-    name: Test on node ${{ matrix.node_version }} and ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        node_version: ['18.x', '20.x']
-        os: [ubuntu-latest, windows-latest, macOS-latest]
-
+  
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
@@ -40,21 +33,12 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: Install Dependencies
-        run: npm install
-
       - name: npm install, build and test
         run: |
           npm install
           npm run build --if-present
           npm test
 
-      - uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node_version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node_version }}
-          
       - run: npm publish
         if: github.event_name == 'push'
         
